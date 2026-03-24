@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console Administrateur | FSTG Security</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --admin-gold: #ffb100;
+            --admin-bg: #0a0a0b;
+            --card-bg: #161618;
+            --text-gray: #a0a0a8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--admin-bg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid #27272a;
+            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Bar Style */
+        .dashboard-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--admin-gold), #ffd700);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #27272a;
+            padding-bottom: 20px;
+        }
+
+        .badge {
+            background: rgba(255, 177, 0, 0.1);
+            color: var(--admin-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid var(--admin-gold);
+        }
+
+        h2 { font-size: 1.8rem; display: flex; align-items: center; gap: 15px; }
+        h2 i { color: var(--admin-gold); }
+
+        .content-box {
+            background: #0f0f11;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--admin-gold);
+        }
+
+        .content-box p { color: var(--text-gray); line-height: 1.6; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1c1c1f;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card span { display: block; color: var(--text-gray); font-size: 0.8rem; margin-bottom: 5px; }
+        .stat-card strong { font-size: 1.5rem; font-family: 'JetBrains Mono', monospace; color: white; }
+
+        .actions { display: flex; gap: 15px; }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-home { background: transparent; border: 1px solid #3f3f46; color: white; }
+        .btn-home:hover { background: #27272a; }
+
+        .btn-logout { background: #e11d48; color: white; }
+        .btn-logout:hover { background: #be123c; transform: translateY(-2px); }
+
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="header">
+        <h2><i class="fas fa-user-shield"></i> Console Administrateur</h2>
+        <span class="badge">Privilèges Élevés</span>
+    </div>
+
+    <div class="content-box">
+        <p>
+            <i class="fas fa-info-circle"></i>
+            Bienvenue dans la zone de contrôle critique. Cette section est <strong>strictement réservée</strong> aux administrateurs.
+            Vous pouvez ici gérer les utilisateurs, surveiller les logs et modifier les configurations système.
+        </p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span>Serveur Status</span>
+            <strong style="color: #22c55e;">ONLINE</strong>
+        </div>
+        <div class="stat-card">
+            <span>Sessions Actives</span>
+            <strong>12</strong>
+        </div>
+        <div class="stat-card">
+            <span>Alertes Sécurité</span>
+            <strong style="color: var(--admin-gold);">0</strong>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a th:href="@{/home}" class="btn btn-home">
+            <i class="fas fa-arrow-left"></i> Retour Accueil
+        </a>
+        <a th:href="@{/logout}" class="btn btn-logout">
+            <i class="fas fa-power-off"></i> Déconnexion
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

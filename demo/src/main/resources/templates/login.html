@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Sécurisée | FSTG Portal</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6c5ce7; /* Violet moderne */
+            --secondary: #a29bfe;
+            --bg-dark: #0f172a; /* Bleu très foncé */
+            --text-light: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-dark);
+            overflow: hidden; /* Pour l'animation d'arrière-plan */
+            color: var(--text-light);
+        }
+
+        /* --- Animation d'Arrière-plan (Orbites) --- */
+        .background-circles {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        .circle-1 { width: 300px; height: 300px; top: -50px; left: -50px; }
+        .circle-2 { width: 400px; height: 400px; bottom: -100px; right: -100px; animation-delay: -2s; }
+        .circle-3 { width: 200px; height: 200px; top: 40%; right: 20%; animation-delay: -4s; opacity: 0.15;}
+
+        @keyframes float {
+            0% { transform: translateY(0px) translateX(0px); }
+            100% { transform: translateY(50px) translateX(30px); }
+        }
+
+        /* --- Carte de Login (Glassmorphism) --- */
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px); /* Effet de flou crucial */
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 35px 60px -15px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Effet de lueur au survol */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+        .login-card:hover::before { left: 100%; }
+
+        .brand-header { text-align: center; margin-bottom: 40px; }
+        .brand-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        h2 { font-weight: 700; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 5px;}
+        .subtitle { color: #94a3b8; font-size: 0.9rem; }
+
+        /* --- Champs de Formulaire --- */
+        .form-group { margin-bottom: 25px; position: relative; }
+        .input-icon {
+            position: absolute;
+            left: 15px; top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 50px; /* Espace pour l'icône */
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.15);
+        }
+        input:focus + .input-icon { color: var(--primary); }
+
+        /* --- Bouton --- */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            box-shadow: 0 10px 20px -5px rgba(108, 92, 231, 0.5);
+            transform: scale(1.02);
+        }
+
+        button:active { transform: scale(0.98); }
+
+        /* --- Alertes Stylisées --- */
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
+        }
+
+        .error {
+            background-color: rgba(239, 68, 68, 0.1); /* Rouge transparent */
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .logout {
+            background-color: rgba(34, 197, 94, 0.1); /* Vert transparent */
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 20px; border-radius: 16px; margin: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="background-circles">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+</div>
+
+<div class="login-card">
+    <div class="brand-header">
+        <div class="brand-icon">
+            <i class="fas fa-shield-alt"></i> </div>
+        <h2>Connexion</h2>
+        <p class="subtitle">Accédez à votre espace sécurisé FSTG</p>
+    </div>
+
+    <div th:if="${param.error}" class="alert error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Identifiants incorrects. Veuillez réessayer.</span>
+    </div>
+
+    <div th:if="${param.logout}" class="alert logout">
+        <i class="fas fa-check-circle"></i>
+        <span>Déconnexion réussie. À bientôt !</span>
+    </div>
+
+    <form th:action="@{/authenticate}" method="post">
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Pseudo utilisateur" required autocomplete="off">
+            <i class="fas fa-user input-icon"></i>
+        </div>
+
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <i class="fas fa-lock input-icon"></i>
+        </div>
+
+        <button type="submit">
+            <span>Se Connecter</span>
+        </button>
+    </form>
+
+    <div class="footer">
+        FSTG Security Module &copy; 2026
+    </div>
+</div>
+
+</body>
+</html>

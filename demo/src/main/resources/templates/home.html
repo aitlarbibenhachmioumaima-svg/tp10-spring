@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord | Secure App</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Background Animation */
+        .bg-glow {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.2) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(50px);
+            animation: move 15s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-50%, -50%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .header i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+        h2 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 700; }
+        .welcome-msg { color: #94a3b8; margin-bottom: 40px; font-size: 1.1rem; }
+
+        /* Grid for Cards */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .nav-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-card:hover {
+            background: rgba(108, 92, 231, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.2);
+        }
+
+        .nav-card i { font-size: 2.5rem; color: var(--primary); }
+        .nav-card span { font-weight: 600; font-size: 1.2rem; }
+        .nav-card p { font-size: 0.85rem; color: #94a3b8; }
+
+        /* Logout Link */
+        .btn-logout {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #f87171;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 12px 25px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #f87171;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="container">
+    <div class="header">
+        <i class="fas fa-user-shield"></i>
+        <h2>Espace Sécurisé</h2>
+        <p class="welcome-msg">
+            Bienvenue, <strong style="color: var(--primary);">Utilisateur</strong> ! Ravi de vous revoir.
+        </p>
+    </div>
+
+    <div class="menu-grid">
+        <a th:href="@{/user/dashboard}" class="nav-card">
+            <i class="fas fa-user-circle"></i>
+            <span>Espace Utilisateur</span>
+            <p>Consultez votre profil et vos données personnelles.</p>
+        </a>
+
+        <a th:href="@{/admin/dashboard}" class="nav-card">
+            <i class="fas fa-tools"></i>
+            <span>Espace Admin</span>
+            <p>Gestion du système et contrôles avancés.</p>
+        </a>
+    </div>
+
+    <a th:href="@{/logout}" class="btn-logout">
+        <i class="fas fa-sign-out-alt"></i> Se déconnecter
+    </a>
+</div>
+
+</body>
+</html>
